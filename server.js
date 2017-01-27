@@ -7,22 +7,25 @@ const morgan = require('morgan');
 // const { Dev, Team } = models;
 // same as const Dev = models.Dev; const Team = models.Team
 const db = require('./models')
-
-
-// express static
-
 const devsRouter = require('./routes/devs');
 const teamsRouter = require('./routes/teams');
-app.use('/teams', teamsRouter);
-app.use('/devs', devsRouter);
 
+
+// parsing and logging
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 
+
+// express static
+app.use('/teams', teamsRouter);
+app.use('/devs', devsRouter);
+
+
+// by this point, any unhandled request is for a page that doesn't exist
 app.use((req, res, next) => {
-	const err = new Error('Page not found');
+	const err = new Error('Page not found, so sad, no cat pics for you');
 	err.status = 404;
 	next(err);
 })
